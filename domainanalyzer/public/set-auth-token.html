@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Auth Token</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Set Auth Token for Testing</h1>
+        <p>This page helps you set the authentication token for testing the application.</p>
+        
+        <div>
+            <label for="tokenInput">Auth Token:</label>
+            <input type="text" id="tokenInput" placeholder="Enter your auth token here">
+        </div>
+        
+        <button onclick="setToken()">Set Token</button>
+        <button onclick="clearToken()">Clear Token</button>
+        <button onclick="checkToken()">Check Current Token</button>
+        <button onclick="setTestToken()">Set Test Token</button>
+        
+        <div id="status"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Click "Set Test Token" to use a pre-generated test token</li>
+                <li>Or paste your own token and click "Set Token"</li>
+                <li>Go back to the main application</li>
+                <li>The keywords should now load properly</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function setToken() {
+            const token = document.getElementById('tokenInput').value;
+            if (token) {
+                localStorage.setItem('authToken', token);
+                showStatus('Token set successfully!', 'success');
+            } else {
+                showStatus('Please enter a token', 'error');
+            }
+        }
+        
+        function clearToken() {
+            localStorage.removeItem('authToken');
+            showStatus('Token cleared!', 'success');
+        }
+        
+        function checkToken() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                showStatus('Current token: ' + token.substring(0, 50) + '...', 'success');
+            } else {
+                showStatus('No token found', 'error');
+            }
+        }
+        
+        function setTestToken() {
+            // This is the test token we generated earlier
+            const testToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYW5pc2hzdW1hbjIzMDVAZ21haWwuY29tIiwiaWF0IjoxNzU0OTMxMzg3LCJleHAiOjE3NTU1MzYxODd9.dO07aJmD30knAUtIImSGXUX96ngzNg5ywPYha52CZb0';
+            localStorage.setItem('authToken', testToken);
+            document.getElementById('tokenInput').value = testToken;
+            showStatus('Test token set successfully!', 'success');
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.textContent = message;
+        }
+        
+        // Check token on page load
+        window.onload = function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                document.getElementById('tokenInput').value = token;
+                showStatus('Token found in localStorage', 'success');
+            }
+        };
+    </script>
+</body>
+</html> 
